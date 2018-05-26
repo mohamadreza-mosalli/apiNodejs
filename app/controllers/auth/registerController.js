@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('./../../models/user');
 
-
 signToken = user => {
     return jwt.sign({ 
         iss : 'Hexzm' ,
@@ -27,7 +26,7 @@ module.exports = {
         await newUser.save( err =>{ 
             if(err) console.log(err)
             else{
-                //generat token
+                // generat token
                 const token = signToken(newUser)
                 res.status(200).json({ token });
             }
