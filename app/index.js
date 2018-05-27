@@ -10,6 +10,7 @@ module.exports = class App {
         this.setDatabase();
         this.setMiddlewares();
         this.setRoutes();
+        this.handleErrors();
     }
 
     setExpress(){
@@ -30,5 +31,27 @@ module.exports = class App {
 
     setRoutes(){
         app.use('/api',require('./routes'));
+    }
+
+    handleErrors(){
+        // catch 404 errors and forward them to error handler
+        app.use((req , res , next) => {
+            const err = new Error('Not Found');
+            err.status(404);
+            next(err);
+        });
+
+        // error handler function
+        app.use((err , req , res , next) => {
+            const error = app.get('env') === 'development';
+            const status = err.status || 500;
+
+            // response handler client
+            res.status(status).json({
+                error : {
+                    message : error.message
+                }
+            });
+        });
     }
 }
